@@ -36,10 +36,8 @@ function compute_happiness(A,i,j)
     ss
 end
 
-function step!(A,n=2)
+function compute_happiness!(H::Matrix{T1}, A::Matrix{T2}) where T1 <: Real where T2 <: Real
     r,c = size(A)
-    nb = fill(0,4)
-    H = fill(0,r,c)
     for j in 1:c 
         for i in 1:r
             aij = A[i,j]
@@ -47,6 +45,18 @@ function step!(A,n=2)
             H[i,j] = compute_happiness(A, i, j)
         end
     end
+    H
+end
+
+function compute_happiness(A::Matrix{T2}) where T1 <: Real where T2 <: Real
+    H = fill(0,r,c)
+    compute_happiness!(H, A)
+end
+
+function step!(A,n=2)
+    r,c = size(A)
+    H = fill(0,r,c)
+    compute_happiness!(H,A)
     #find the unhappy Merkles 
     K = findall(H .< n)
     for k1 in K
