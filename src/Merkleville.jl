@@ -1,5 +1,18 @@
 module Merkleville
 using Random
+import Random.rand
+
+struct Town
+    A::Matrix{Int64}
+    H::Matrix{Int64}
+end
+
+function rand(::Type{Town},r::Int64,c::Int64)
+    A = init(r,c)
+    H = fill!(similar(A), 0)
+    compute_happiness!(H,A)
+    Town(A,H)
+end
 
 function init(r,c=r)
     A = fill(0, r,c)
@@ -53,11 +66,26 @@ function compute_happiness(A::Matrix{T2}) where T1 <: Real where T2 <: Real
     compute_happiness!(H, A)
 end
 
-function step!(A,n=2)
-    r,c = size(A)
-    H = fill(0,r,c)
-    compute_happiness!(H,A)
-    #find the unhappy Merkles 
+function compute_happiness!(town::Town)
+    compute_happiness!(town.H, town.A)
+end
+
+function step!(town::Town,n=2)
+    compute_happiness!(town)
+    relocate!(town,n)
+end
+
+function simulate!(town::Town,n=2,niter=500,callback=(X)->nothing)
+    for i in 1:niter
+        step!(town,n)
+        callback(town)
+        yield()
+    end
+end
+
+function relocate!(town::Town,n=2)
+    A = town.A
+    H = town.H
     K = findall(H .< n)
     for k1 in K
         a1 = A[k1]
