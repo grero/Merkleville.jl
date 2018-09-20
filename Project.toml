@@ -1,0 +1,9 @@
+name = "Merkleville"
+uuid = "72204c02-bc91-11e8-34ad-2f9e7696f281"
+authors = ["roger <roger.herikstad@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
