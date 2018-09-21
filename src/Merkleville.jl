@@ -8,8 +8,13 @@ struct Town
     neighbours::Vector{Tuple{Int64,Int64}}
 end
 
-function rand(::Type{Town},r::Int64,c::Int64)
-    A = init(r,c)
+function rand(T::Type{Town},r::Int64,c::Int64)
+    rand(MersenneTwister(rand(UInt32)),T,r,c)
+end
+
+function rand(RNG::AbstractRNG,::Type{Town},r::Int64,c::Int64)
+    A = fill(0, r,c)
+    rand!(RNG, A, [-1,1])
     H = fill!(similar(A), 0)
     neighbours = [(-1,0),(1,0),(0,-1),(0,1)]
     compute_happiness!(H,A,neighbours)
