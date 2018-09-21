@@ -83,10 +83,20 @@ function simulate!(town::Town,n=2,niter=500,callback=(X)->nothing)
     end
 end
 
-function relocate!(town::Town,n=2)
+relocate!(town::Town,n::Int64) = relocate!(town, Dict(-1 => n, 1 => n))
+
+function relocate!(town::Town,n::Dict{Int64,Int64})
     A = town.A
     H = town.H
-    K = findall(H .< n)
+    K = Vector{CartesianIndex{2}}()
+    r,c = size(A)
+    for j in 1:c
+        for i in 1:r
+            if H[i,j] < n[A[i,j]]
+                push!(K,CartesianIndex(i,j)) 
+            end
+        end
+    end
     for k1 in K
         a1 = A[k1]
         for k2 in K
