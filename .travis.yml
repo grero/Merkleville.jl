@@ -27,6 +27,6 @@ before_script: # homebrew for mac
     #
 ## uncomment the following lines to override the default test script
 script:
-    - julia --project=Merkleville -e 'using Pkg; pkg"instantiate";pkg"test"'
+    - julia --project=Merkleville -e 'using Pkg; print(pwd());pkg"instantiate";pkg"test"'
 after_success:
   # push coverage results to Coveralls
